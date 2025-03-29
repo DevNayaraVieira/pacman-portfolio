@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+    <html lang="pt-BR" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pac-Man - Nayara Vieira</title>
+    <meta name="description" content="Jogo Pac-Man desenvolvido para portfolio de Nayara Vieira - Desenvolvedora Full Stack & QA">
+    <meta name="author" content="Nayara Vieira">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="assets/img/pac.png" type="image/png">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">    
+</head>
+<body data-bs-spy="scroll" data-bs-target="#navbar">
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Navbar -->
+    <nav id="navbar" class="navbar navbar-expand-lg navbar-light fixed-top">
+        <div class="container d-flex justify-content-between align-items-center">
+            <a class="navbar-brand" href="#">Pac-Man <span class="d-none d-md-inline">| DevNayaraVieira</span></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#game">Jogo</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#how-to-play">Como Jogar</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">Sobre</a>
+                    </li>
+                    <li class="nav-item">
+                        <div class="switch">
+                            <input type="checkbox" id="themeToggle" class="switch__toggle">
+                            <div class="switch__icon switch__icon--sun"><i class="fas fa-sun"></i></div>
+                            <div class="switch__icon switch__icon--moon"><i class="fas fa-moon"></i></div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header Section with Game Canvas -->
+    <section id="game" class="game-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="game-container" data-aos="fade-up">
+                        <div class="game-header">
+                            <div class="score-container">
+                                <div class="score-label">Pontuação</div>
+                                <div id="score" class="score">0</div>
+                            </div>
+                            <div class="level-container">
+                                <div class="level-label">Nível</div>
+                                <div id="level" class="level">1</div>
+                            </div>
+                            <div class="lives-container">
+                                <div class="lives-label">Vidas</div>
+                                <div id="lives" class="lives">
+                                    <i class="fas fa-heart"></i>
+                                    <i class="fas fa-heart"></i>
+                                    <i class="fas fa-heart"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Game Canvas -->
+                        <div class="canvas-container">
+                            <canvas id="gameCanvas" width="448" height="496"></canvas>
+                            
+                            <!-- Game Controls for Mobile -->
+                            <div class="mobile-controls">
+                                <button id="upBtn" class="control-btn"><i class="fas fa-arrow-up"></i></button>
+                                <div class="horizontal-controls">
+                                    <button id="leftBtn" class="control-btn"><i class="fas fa-arrow-left"></i></button>
+                                    <button id="rightBtn" class="control-btn"><i class="fas fa-arrow-right"></i></button>
+                                </div>
+                                <button id="downBtn" class="control-btn"><i class="fas fa-arrow-down"></i></button>
+                            </div>
+                        </div>
+                        
+                        <!-- Game Overlays -->
+                        <div id="startScreen" class="game-overlay start-screen">
+                            <div class="overlay-content">
+                                <h2>PAC-MAN</h2>
+                                <p>Use as setas do teclado para mover</p>
+                                <button id="startBtn" class="btn btn-rosa">Iniciar Jogo</button>
+                            </div>
+                        </div>
+                        
+                        <div id="pauseScreen" class="game-overlay pause-screen d-none">
+                            <div class="overlay-content">
+                                <h2>JOGO PAUSADO</h2>
+                                <button id="resumeBtn" class="btn btn-rosa">Continuar</button>
+                                <button id="restartBtn" class="btn btn-outline-dark">Reiniciar</button>
+                            </div>
+                        </div>
+                        
+                        <div id="gameOverScreen" class="game-overlay game-over-screen d-none">
+                            <div class="overlay-content">
+                                <h2>GAME OVER</h2>
+                                <p>Pontuação: <span id="finalScore">0</span></p>
+                                <button id="playAgainBtn" class="btn btn-rosa">Jogar Novamente</button>
+                            </div>
+                        </div>
+                        
+                        <div id="levelCompleteScreen" class="game-overlay level-complete-screen d-none">
+                            <div class="overlay-content">
+                                <h2>NÍVEL COMPLETO!</h2>
+                                <p>Pontuação: <span id="levelScore">0</span></p>
+                                <button id="nextLevelBtn" class="btn btn-rosa">Próximo Nível</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Game Controls -->
+                        <div class="game-controls">
+                            <button id="pauseBtn" class="game-control-btn">
+                                <i class="fas fa-pause"></i> Pausar
+                            </button>
+                            <button id="muteBtn" class="game-control-btn">
+                                <i class="fas fa-volume-up"></i> Som
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How to Play Section -->
+    <section id="how-to-play" class="section bg-rosa-claro">
+        <div class="container">
+            <div class="text-center mb-5" data-aos="fade-up">
+                <h2 class="fw-bold mb-3">Como Jogar</h2>
+                <p class="lead">Aprenda a jogar Pac-Man e domine o labirinto!</p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="instruction-card">
+                        <div class="instruction-icon">
+                            <i class="fas fa-gamepad"></i>
+                        </div>
+                        <h3 class="instruction-title">Controles</h3>
+                        <p>Use as teclas de seta (↑, ↓, ←, →) para mover o Pac-Man pelo labirinto. Em dispositivos móveis, utilize os botões direcionais na tela.</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="instruction-card">
+                        <div class="instruction-icon">
+                            <i class="fas fa-dot-circle"></i>
+                        </div>
+                        <h3 class="instruction-title">Objetivo</h3>
+                        <p>Coma todos os pontos para completar o nível. Evite os fantasmas, ou você perderá uma vida. Coma frutas para ganhar pontos extras.</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="instruction-card">
+                        <div class="instruction-icon">
+                            <i class="fas fa-ghost"></i>
+                        </div>
+                        <h3 class="instruction-title">Power-Ups</h3>
+                        <p>Coma as pílulas de poder (pontos maiores) para tornar os fantasmas vulneráveis. Enquanto estiverem azuis, você pode comê-los para ganhar mais pontos!</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mt-5">
+                <div class="col-lg-6" data-aos="fade-up" data-aos-delay="400">
+                    <div class="ghost-info-card">
+                        <h3 class="text-center mb-4">Os Fantasmas</h3>
+                        <div class="ghost-grid">
+                            <div class="ghost-item">
+                                <div class="ghost-icon ghost-red"></div>
+                                <div class="ghost-details">
+                                    <h4>Blinky</h4>
+                                    <p>O fantasma vermelho. Persegue você diretamente e fica mais rápido conforme você come mais pontos.</p>
+                                </div>
+                            </div>
+                            <div class="ghost-item">
+                                <div class="ghost-icon ghost-pink"></div>
+                                <div class="ghost-details">
+                                    <h4>Pinky</h4>
+                                    <p>O fantasma rosa. Tenta emboscar você se posicionando à sua frente.</p>
+                                </div>
+                            </div>
+                            <div class="ghost-item">
+                                <div class="ghost-icon ghost-cyan"></div>
+                                <div class="ghost-details">
+                                    <h4>Inky</h4>
+                                    <p>O fantasma azul. Movimento imprevisível, usando Blinky como referência.</p>
+                                </div>
+                            </div>
+                            <div class="ghost-item">
+                                <div class="ghost-icon ghost-orange"></div>
+                                <div class="ghost-details">
+                                    <h4>Clyde</h4>
+                                    <p>O fantasma laranja. Alterna entre perseguir você e vagar aleatoriamente.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6" data-aos="fade-up" data-aos-delay="500">
+                    <div class="score-info-card">
+                        <h3 class="text-center mb-4">Pontuação</h3>
+                        <table class="score-table">
+                            <tr>
+                                <td><div class="score-icon pellet"></div></td>
+                                <td>Pellet (ponto pequeno)</td>
+                                <td>10 pontos</td>
+                            </tr>
+                            <tr>
+                                <td><div class="score-icon power-pellet"></div></td>
+                                <td>Power Pellet (ponto grande)</td>
+                                <td>50 pontos</td>
+                            </tr>
+                            <tr>
+                                <td><div class="score-icon ghost"></div></td>
+                                <td>Fantasma (azul)</td>
+                                <td>200-1600 pontos</td>
+                            </tr>
+                            <tr>
+                                <td><div class="score-icon fruit cherry"></div></td>
+                                <td>Cereja</td>
+                                <td>100 pontos</td>
+                            </tr>
+                            <tr>
+                                <td><div class="score-icon fruit strawberry"></div></td>
+                                <td>Morango</td>
+                                <td>300 pontos</td>
+                            </tr>
+                            <tr>
+                                <td><div class="score-icon fruit orange"></div></td>
+                                <td>Laranja</td>
+                                <td>500 pontos</td>
+                            </tr>
+                        </table>
+                        <div class="bonus-info mt-4">
+                            <p>Comer todos os pontos dá um bônus de 1000 pontos!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <button id="resetGameBtn" class="btn btn-rosa" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999;">
+        Reiniciar Jogo
+    </button>
+    
+    <script>
+    document.getElementById('resetGameBtn').addEventListener('click', function() {
+        if (window.game) {
+            window.game.resetGame();
+        }
+    });
+    </script>
+
+    <!-- About Section -->
+    <section id="about" class="section">
+        <div class="container">
+            <div class="text-center mb-5" data-aos="fade-up">
+                <h2 class="fw-bold mb-3">Sobre o Projeto</h2>
+                <p class="lead">Um Pac-Man desenvolvido com HTML5 Canvas, JavaScript e CSS moderno</p>
+            </div>
+            
+            <div class="row align-items-center">
+                <div class="col-lg-6" data-aos="fade-right">
+                    <div class="about-content">
+                        <h3 class="mb-4">Desenvolvimento do Jogo</h3>
+                        <p>Este Pac-Man foi desenvolvido como parte do meu portfólio de desenvolvimento web, demonstrando habilidades em:</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check-circle"></i> JavaScript Orientado a Objetos</li>
+                            <li><i class="fas fa-check-circle"></i> HTML5 Canvas para renderização</li>
+                            <li><i class="fas fa-check-circle"></i> CSS3 para estilização moderna</li>
+                            <li><i class="fas fa-check-circle"></i> Suporte para modo claro/escuro</li>
+                            <li><i class="fas fa-check-circle"></i> Design responsivo para mobile</li>
+                            <li><i class="fas fa-check-circle"></i> Algoritmos de pathfinding para os fantasmas</li>
+                        </ul>
+                        <p class="mt-4">O jogo foi construído do zero, implementando a mecânica clássica do Pac-Man com toques modernos no design visual inspirado no meu portfólio profissional.</p>
+                        <div class="tech-stack mt-4">
+                            <span class="tech-tag">HTML5</span>
+                            <span class="tech-tag">CSS3</span>
+                            <span class="tech-tag">JavaScript</span>
+                            <span class="tech-tag">Canvas API</span>
+                            <span class="tech-tag">Bootstrap 5</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6" data-aos="fade-left">
+                    <div class="code-snippet">
+                        <div class="code-snippet-content">
+                            <pre><code>// Exemplo de implementação do movimento do Pac-Man
+class Player {
+  constructor(x, y, radius, speed) {
+    this.x = x;
+    this.y = y;
+    this.radius = radius;
+    this.speed = speed;
+    this.direction = null;
+    this.nextDirection = null;
+    this.angle = 0;
+    this.mouthOpen = true;
+    this.mouthAngle = 0.2;
+  }
+
+  update(map) {
+    // Verificar se a próxima direção é válida
+    if (this.nextDirection !== null) {
+      if (this.canMove(this.nextDirection, map)) {
+        this.direction = this.nextDirection;
+        this.nextDirection = null;
+      }
+    }
+
+    // Mover na direção atual se possível
+    if (this.direction !== null && this.canMove(this.direction, map)) {
+      switch (this.direction) {
+        case "up": this.y -= this.speed; break;
+        case "down": this.y += this.speed; break;
+        case "left": this.x -= this.speed; break;
+        case "right": this.x += this.speed; break;
+      }
+    }
+
+    // Animação da boca
+    this.mouthAngle = this.mouthOpen ? 0.2 : 0.01;
+    this.mouthOpen = !this.mouthOpen;
+  }
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mt-5">
+                <div class="col-12" data-aos="fade-up">
+                    <div class="future-features">
+                        <h3 class="text-center mb-4">Futuras Implementações</h3>
+                        <div class="row g-4">
+                            <div class="col-md-4">
+                                <div class="feature-card">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-trophy"></i>
+                                    </div>
+                                    <h4>Sistema de Ranking</h4>
+                                    <p>Implementação de um sistema de ranking online para comparar pontuações com outros jogadores.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="feature-card">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-map"></i>
+                                    </div>
+                                    <h4>Mapas Personalizados</h4>
+                                    <p>Criação de diferentes labirintos para aumentar a variedade e o desafio do jogo.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="feature-card">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-mobile-alt"></i>
+                                    </div>
+                                    <h4>Aplicativo Mobile</h4>
+                                    <p>Versão nativa para dispositivos móveis utilizando frameworks como React Native.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="text-center">
+                <div class="social-links">
+                    <a href="https://github.com/devnayaravieira" class="social-link" target="_blank"><i class="fab fa-github"></i></a>
+                    <a href="https://linkedin.com/in/nayaranunesvieira" class="social-link" target="_blank"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://wa.me/5515996855425" class="social-link" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://instagram.com/nayaravieira_" class="social-link" target="_blank"><i class="fab fa-instagram"></i></a>
+                </div>
+                <p>&copy; 2025 Nayara Vieira - Desenvolvedora Full Stack & QA. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+    <a href="https://portfolio-devnayaravieira.netlify.app" id="backToPortfolioBtn" class="btn btn-rosa" style="position: fixed; bottom: 20px; left: 20px; z-index: 9999;">
+        <i class="fas fa-arrow-left"></i> Voltar ao Portfólio
+    </a>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/utils.js"></script>
+    <script src="assets/js/map.js"></script>
+    <script src="assets/js/player.js"></script>
+    <script src="assets/js/ghosts.js"></script>
+    <script src="assets/js/game.js"></script>
+    <script src="assets/js/theme.js"></script>       
+    <script>
+        // Impedir rolagem da página com as teclas de seta
+        window.addEventListener('keydown', function(e) {
+            if(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(e.key)) {
+                e.preventDefault();
+            }
+        }, false);
+        </script>
+</body>
+</html>
